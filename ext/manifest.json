@@ -4,7 +4,7 @@
   "version": "1.5",
   "permissions": ["sidePanel", "activeTab", "scripting", "storage", "identity"],
   "oauth2": {
-    "client_id": "SEU_CLIENT_ID_DO_GOOGLE_AQUI.apps.googleusercontent.com",
+    "client_id": "923198032473-orpi2v6at6dt0dfn39cv0slgf8qalpqt.apps.googleusercontent.com",
     "scopes": ["email", "profile"]
   },
   "action": { "default_title": "Abrir Alpha Insights" },
