@@ -92,7 +92,7 @@ app.post('/api/analisar', authenticateGoogleToken, async (req, res) => {
       return res.json({ error: '🛡️ PARE: Este perfil é exclusivo para membros PRO. <br> <a href="https://seu-site.com/assinar" target="_blank">Clique aqui para liberar</a>' });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.1-pro" });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
