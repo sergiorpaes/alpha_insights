@@ -160,9 +160,29 @@ app.post('/webhook/stripe', express.raw({type: 'application/json'}), async (req,
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object;
     const customerEmail = session.customer_details.email;
+    const stripeCustomerId = session.customer; // O ID único do cliente no Stripe
     
-    // Atualiza usuário para PRO no Neon
-    await pool.query('UPDATE users SET plan = $1 WHERE email = $2', ['PRO', customerEmail]);
+    // Atualiza usuário para PRO e salva o ID do Stripe
+    await pool.query(
+      'UPDATE users SET plan = $1, stripe_id = $2 WHERE email = $3', 
+      ['PRO', stripeCustomerId, customerEmail]
+    );
+    console.log(`✅ Assinatura PRO ativada para: ${customerEmail}`);
+  } 
+  
+  else if (event.type === 'customer.subscription.deleted' || event.type === 'invoice.payment_failed') {
+    // Quando a assinatura é cancelada ou o pagamento de renovação falha
+    const stripeObject = event.data.object;
+    const stripeCustomerId = stripeObject.customer;
+    
+    if (stripeCustomerId) {
+      // Rebaixa o usuário localizando pelo ID do Stripe
+      await pool.query(
+        'UPDATE users SET plan = $1 WHERE stripe_id = $2', 
+        ['FREE', stripeCustomerId]
+      );
+      console.log(`❌ Assinatura expirada/falha. Usuário rebaixado para FREE (Stripe ID: ${stripeCustomerId})`);
+    }
   }
 
   res.json({received: true});
