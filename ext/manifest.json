@@ -4,16 +4,19 @@
   "version": "1.5",
   "description": "Inteligência Artificial preditiva para análise de teses de investimentos, relatórios financeiros e riscos. Exclusivo para perfis Alpha.",
   "icons": {
-    "16": "icon.png",
-    "48": "icon.png",
-    "128": "icon.png"
+    "16": "icon128.png",
+    "48": "icon128.png",
+    "128": "icon128.png"
   },
   "permissions": ["sidePanel", "activeTab", "scripting", "storage", "identity"],
   "oauth2": {
     "client_id": "923198032473-orpi2v6at6dt0dfn39cv0slgf8qalpqt.apps.googleusercontent.com",
     "scopes": ["email", "profile"]
   },
-  "action": { "default_title": "Abrir Alpha Insights" },
+  "action": { 
+    "default_title": "Abrir Alpha Insights",
+    "default_icon": "icon128.png"
+  },
   "side_panel": { "default_path": "sidepanel.html" },
   "content_scripts": [
     {
