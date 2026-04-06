@@ -92,10 +92,37 @@ app.post('/api/analisar', authenticateGoogleToken, async (req, res) => {
       return res.json({ error: '🛡️ PARE: Este perfil é exclusivo para membros PRO. <br> <a href="https://seu-site.com/assinar" target="_blank">Clique aqui para liberar</a>' });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-3.1-pro" });
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    // --- BÚSSOLA DE MODELOS (Fallback) ---
+    // Como os modelos do Google mudam, testamos do mais moderno para o mais estável
+    const modelsToTry = [
+      "gemini-2.5-flash",
+      "gemini-1.5-flash-latest", 
+      "gemini-1.5-flash",
+      "gemini-1.5-pro",
+      "gemini-pro"
+    ];
+
+    let text = "";
+    let lastError = null;
+
+    for (const modelName of modelsToTry) {
+      try {
+        console.log(`Tentando processar com o modelo: ${modelName}...`);
+        const model = genAI.getGenerativeModel({ model: modelName });
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        text = response.text();
+        console.log(`✅ Sucesso com o modelo: ${modelName}`);
+        break; // Deu certo, sai do loop!
+      } catch (e) {
+        console.log(`❌ Falha no modelo ${modelName}: ${e.message.substring(0, 50)}...`);
+        lastError = e;
+      }
+    }
+
+    if (!text) {
+      throw lastError; // Se todos falharem, joga o último erro pro catch principal
+    }
 
     // Audit log (silencioso)
     pool.query('INSERT INTO usage_logs (user_id, activity) SELECT id, $1 FROM users WHERE email = $2', 
