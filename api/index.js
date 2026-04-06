@@ -12,11 +12,26 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// --- VALIDAÇÃO DE STARTUP ---
+const requiredVars = ['DATABASE_URL', 'GEMINI_API_KEY', 'STRIPE_SECRET_KEY'];
+requiredVars.forEach(v => {
+  if (!process.env[v] || process.env[v] === 'undefined' || process.env[v] === '') {
+    console.error(`❌ ERRO CRÍTICO: Variável de ambiente ${v} não definida!`);
+    process.exit(1);
+  }
+});
+
 // 1. Configurações do Banco (Neon)
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
 });
+
+pool.on('error', (err) => {
+  console.error('Unexpected error on idle client', err);
+});
+
+console.log("✅ Banco de dados configurado.");
 
 // 2. Configurações da IA (Gemini)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
