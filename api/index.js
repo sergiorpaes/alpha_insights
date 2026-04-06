@@ -10,7 +10,6 @@ const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 const app = express();
 app.use(cors());
-app.use(express.json());
 
 // --- VALIDAÇÃO DE STARTUP ---
 const requiredVars = ['DATABASE_URL', 'GEMINI_API_KEY', 'STRIPE_SECRET_KEY'];
@@ -82,6 +81,9 @@ const authenticateGoogleToken = async (req, res, next) => {
 };
 
 // --- ENDPOINT: ANALISAR ---
+// Habilita JSON parsing apenas nas rotas da API, protegendo o Webhook do Stripe
+app.use('/api', express.json());
+
 app.post('/api/analisar', authenticateGoogleToken, async (req, res) => {
   const { prompt, perfil } = req.body;
   const { email, plan } = req.user;
