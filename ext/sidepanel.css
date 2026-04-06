@@ -35,18 +35,18 @@ body {
 header {
     margin-bottom: 25px;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 }
 
 .logo-section {
-    text-align: center;
+    text-align: left;
 }
 
 .logo-container {
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
     gap: 8px;
 }
 
