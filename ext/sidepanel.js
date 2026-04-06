@@ -221,7 +221,7 @@ document.getElementById('btnAnalisar').addEventListener('click', async () => {
                         <div class="pro-upgrade-icon">💎</div>
                         <h3 class="pro-upgrade-title">Recurso Premium</h3>
                         <p class="pro-upgrade-desc">Este perfil de análise profundo (Agressivo / Cético / Jurídico) está disponível apenas para membros Alpha PRO.</p>
-                        <a href="https://buy.stripe.com/test_seu_link" target="_blank" class="pro-upgrade-btn">
+                        <a href="https://buy.stripe.com/test_3cIdR2bKwbzr3riaQjdby00" target="_blank" class="pro-upgrade-btn">
                             Desbloquear Acesso PRO
                         </a>
                     </div>
