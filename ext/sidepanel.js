@@ -5,7 +5,7 @@ pdfjsLib.GlobalWorkerOptions.workerSrc = './lib/pdf.worker.mjs';
 
 // --- CONFIGURAÇÃO GLOBAL ---
 // Substitua pela URL da sua API no Koyeb após o deploy
-const BACKEND_URL = "https://sua-app-no-koyeb.koyeb.app"; 
+const BACKEND_URL = "https://previous-christina-integrate-a30682fc.koyeb.app"; 
 
 // --- INICIALIZAÇÃO ---
 window.addEventListener('load', async () => {
