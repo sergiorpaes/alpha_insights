@@ -454,28 +454,42 @@ button {
 }
 
 .login-card {
-    background: var(--card);
-    padding: 40px;
-    border-radius: 24px;
-    border: 1px solid var(--border);
+    background: linear-gradient(145deg, #112240, #0a192f);
+    padding: 40px 30px;
+    border-radius: 20px;
+    border: 1px solid rgba(100, 255, 218, 0.2);
     max-width: 280px;
+    box-shadow: 0 10px 30px -10px rgba(100, 255, 218, 0.1);
+}
+
+.login-card h3 {
+    color: var(--accent);
+    font-size: 1.4rem;
+    margin: 5px 0 10px 0;
 }
 
 .btn-google {
-    background: var(--white);
-    color: var(--deep);
+    background: white;
+    color: #444;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 10px;
+    gap: 12px;
     width: 100%;
-    margin-top: 20px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
     padding: 12px;
-    border-radius: 12px;
-    font-weight: 700;
+    border-radius: 8px;
+    font-weight: 600;
     cursor: pointer;
-    border: none;
+    border: 1px solid #ddd;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: all 0.2s ease;
+}
+
+.btn-google:hover {
+    background: #f8f9fa;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    transform: translateY(-1px);
 }
 
 .user-pill {
