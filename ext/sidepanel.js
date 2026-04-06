@@ -9,7 +9,24 @@ const BACKEND_URL = "https://previous-christina-integrate-a30682fc.koyeb.app";
 
 // --- INICIALIZAÇÃO ---
 window.addEventListener('load', async () => {
-    await checkAuth();
+    const user = await checkAuth();
+    if (user) {
+        try {
+            // Verifica o status do plano silenciosamente
+            const res = await fetch(`${BACKEND_URL}/api/me`, {
+                headers: { 'Authorization': `Bearer ${user.token}` }
+            });
+            const data = await res.json();
+            
+            // Exibe o link do portal apenas se for PRO
+            if (data.plan === 'PRO') {
+                const portalSpan = document.getElementById('portalLinkSpan');
+                if (portalSpan) portalSpan.classList.remove('hidden');
+            }
+        } catch (e) {
+            console.error("Erro ao verificar plano:", e);
+        }
+    }
 });
 
 document.getElementById('btnLogin')?.addEventListener('click', async () => {

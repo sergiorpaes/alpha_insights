@@ -80,6 +80,11 @@ const authenticateGoogleToken = async (req, res, next) => {
   }
 };
 
+// --- ENDPOINT: ME ---
+app.get('/api/me', authenticateGoogleToken, (req, res) => {
+  res.json({ plan: req.user.plan });
+});
+
 // --- ENDPOINT: ANALISAR ---
 // Habilita JSON parsing apenas nas rotas da API, protegendo o Webhook do Stripe
 app.use('/api', express.json());
