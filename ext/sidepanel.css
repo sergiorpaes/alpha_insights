@@ -497,3 +497,59 @@ button {
     height: 18px;
     border-radius: 50%;
 }
+
+/* Premium Upgrade Card */
+.pro-upgrade-card {
+    background: linear-gradient(145deg, #112240, #0a192f);
+    border: 1px solid rgba(100, 255, 218, 0.3);
+    border-radius: 16px;
+    padding: 24px;
+    margin: 15px auto;
+    text-align: center;
+    box-shadow: 0 10px 30px -10px rgba(100, 255, 218, 0.1);
+    animation: slideIn 0.4s ease-out;
+}
+
+.pro-upgrade-icon {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    filter: drop-shadow(0 0 10px rgba(100, 255, 218, 0.5));
+}
+
+.pro-upgrade-title {
+    color: var(--accent);
+    font-size: 1.1rem;
+    font-weight: 800;
+    margin: 0 0 10px 0;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.pro-upgrade-desc {
+    color: var(--text);
+    font-size: 0.85rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+.pro-upgrade-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: var(--accent);
+    color: var(--bg);
+    padding: 12px 24px;
+    border-radius: 12px;
+    font-weight: 800;
+    font-size: 0.85rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(100, 255, 218, 0.2);
+}
+
+.pro-upgrade-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(100, 255, 218, 0.4);
+}
