@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Alpha Insights</title>
+  <link rel="stylesheet" href="sidepanel.css">
+</head>
+<body>
+  <header>
+    <div class="logo-section">
+      <div class="logo-container">
+        <span class="logo-icon">📈</span>
+        <h2 id="mainTitle">Alpha Insights</h2>
+      </div>
+      <p class="subtitle">Equity Intelligence</p>
+    </div>
+    <div id="userProfile" class="user-pill hidden">
+      <img id="userImg" src="" alt="">
+      <span id="userName">Sair</span>
+    </div>
+  </header>
+
+  <div id="loginOverlay" class="login-overlay">
+    <div class="login-card">
+      <span class="logo-icon">🚀</span>
+      <h3>Bem-vindo ao Pro</h3>
+      <p>Sincronize suas análises e acesse perfis exclusivos.</p>
+      <button id="btnLogin" class="btn-google">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_512dp.png" width="18"> Entrar com Google
+      </button>
+    </div>
+  </div>
+  
+  <div id="mainView">
+    <div class="control-panel">
+      <label class="label" for="selectPerfil">Perfil do Investidor</label>
+      <select id="selectPerfil">
+        <option value="agressivo">🔥 AGRESSIVO</option>
+        <option value="conservador">🛡️ CONSERVADOR</option>
+        <option value="sarcastico">🧐 O CÉTICO</option>
+        <option value="legal">⚖️ JURÍDICO & AUDITORIA</option>
+      </select>
+
+      <div class="btn-group">
+        <button id="btnAnalisar">Gerar Insight</button>
+        <button id="btnLimpar">Limpar</button>
+      </div>
+    </div>
+
+    <textarea id="manualArea" placeholder="O navegador bloqueou a leitura? Cole o texto aqui (CTRL+A, CTRL+C) e clique em Gerar Insight novamente..."></textarea>
+    
+    <div id="output" class="results-area"></div>
+  </div>
+
+
+  <canvas id="confetti" class="confetti-canvas"></canvas>
+
+  <footer class="footer">
+    Alpha Insights v1.6 | <a id="openOptions" class="settings-link">Configurações</a>
+  </footer>
+
+  <script src="sidepanel.js" type="module"></script>
+</body>
+</html>

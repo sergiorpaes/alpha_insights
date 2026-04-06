@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Alpha Insights",
+  "version": "1.5",
+  "permissions": ["sidePanel", "activeTab", "scripting", "storage", "identity"],
+  "oauth2": {
+    "client_id": "SEU_CLIENT_ID_DO_GOOGLE_AQUI.apps.googleusercontent.com",
+    "scopes": ["email", "profile"]
+  },
+  "action": { "default_title": "Abrir Alpha Insights" },
+  "side_panel": { "default_path": "sidepanel.html" },
+  "options_page": "options.html",
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>", "file://*/*.pdf"],
+      "js": ["content.js"],
+      "all_frames": true
+    }
+  ],
+  "host_permissions": ["<all_urls>", "file:///*"]
+}
