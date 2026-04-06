@@ -104,7 +104,18 @@ app.post('/api/analisar', authenticateGoogleToken, async (req, res) => {
     res.json({ text });
   } catch (error) {
     console.error("Gemini/Processing Error:", error);
-    res.status(500).json({ error: 'Erro ao gerar insight. Tente novamente em instantes.' });
+    
+    // Erros específicos do Google Gemini
+    let userMessage = 'Erro ao gerar insight. Tente novamente em instantes.';
+    if (error.message && error.message.includes('API key')) {
+      userMessage = 'Erro: Chave API do Gemini inválida ou não configurada.';
+    } else if (error.message && error.message.includes('quota')) {
+      userMessage = 'Erro: Limite de uso do Gemini atingido.';
+    } else if (error.message && error.message.includes('safety')) {
+      userMessage = 'Erro: O Gemini bloqueou este conteúdo por segurança.';
+    }
+
+    res.status(500).json({ error: userMessage });
   }
 });
 
