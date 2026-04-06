@@ -36,7 +36,7 @@ console.log("✅ Banco de dados configurado.");
 // 2. Configurações da IA (Gemini)
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// --- MIDDLEWARE DE AUTENTICAÇÃO (Validando com Google) ---
+// --- MIDDLEWARE DE AUTENTICAÇÃO ---
 const authenticateGoogleToken = async (req, res, next) => {
   const authHeader = req.headers['authorization'];
   const token = authHeader && authHeader.split(' ')[1];
@@ -44,35 +44,40 @@ const authenticateGoogleToken = async (req, res, next) => {
   if (!token) return res.status(401).json({ error: "Token não fornecido." });
 
   try {
-    // Valida o token diretamente com o Google
+    // 1. Valida com o Google
     const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?access_token=${token}`);
     const googleUser = await response.json();
 
     if (googleUser.error) {
-      return res.status(403).json({ error: "Token inválido ou expirado." });
+      console.error("Google Auth Error:", googleUser.error);
+      return res.status(403).json({ error: "Sessão expirada. Faça login novamente." });
     }
 
-    // Garante que o usuário existe no nosso banco (Neon)
     const email = googleUser.email;
-    const name = googleUser.name || 'User';
+    const name = googleUser.name || 'Usuário Alpha';
 
-    const userCheck = await pool.query('SELECT id, plan FROM users WHERE email = $1', [email]);
-    
-    if (userCheck.rows.length === 0) {
-      // Primeiro acesso: cria usuário como FREE
-      const newUser = await pool.query(
-        'INSERT INTO users (email, name, plan) VALUES ($1, $2, $3) RETURNING id, plan',
-        [email, name, 'FREE']
-      );
-      req.user = { email, plan: 'FREE' };
-    } else {
-      req.user = { email, plan: userCheck.rows[0].plan };
+    // 2. Garante registro no Neon
+    try {
+      const userCheck = await pool.query('SELECT plan FROM users WHERE email = $1', [email]);
+      
+      if (userCheck.rows.length === 0) {
+        await pool.query(
+          'INSERT INTO users (email, name, plan) VALUES ($1, $2, $3)',
+          [email, name, 'FREE']
+        );
+        req.user = { email, plan: 'FREE' };
+      } else {
+        req.user = { email, plan: userCheck.rows[0].plan };
+      }
+      next();
+    } catch (dbError) {
+      console.error("Neon DB Error:", dbError);
+      return res.status(500).json({ error: "Erro ao acessar banco de dados Neon." });
     }
 
-    next();
   } catch (error) {
-    console.error("Auth Error:", error);
-    res.status(500).json({ error: "Falha na autenticação com Google." });
+    console.error("General Auth Middleware Error:", error);
+    res.status(500).json({ error: "Falha de conexão com os serviços de autenticação." });
   }
 };
 
@@ -82,26 +87,24 @@ app.post('/api/analisar', authenticateGoogleToken, async (req, res) => {
   const { email, plan } = req.user;
 
   try {
-    // 1. Bloquear Perfis Pagos para usuários Free
     const paidProfiles = ['agressivo', 'sarcastico', 'legal'];
     if (plan === 'FREE' && paidProfiles.includes(perfil)) {
-      return res.status(200).json({ error: 'Upgrade para PRO necessário: Este perfil (Cético/Agressivo/Jurídico) é exclusivo para assinantes.' });
+      return res.json({ error: '🛡️ PARE: Este perfil é exclusivo para membros PRO. <br> <a href="https://seu-site.com/assinar" target="_blank">Clique aqui para liberar</a>' });
     }
 
-    // 2. Chamar Gemini
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const text = response.text();
 
-    // 3. Logar Uso (Audit)
-    await pool.query('INSERT INTO usage_logs (user_id, activity) SELECT id, $1 FROM users WHERE email = $2', 
-      [`ANALYZE_${perfil.toUpperCase()}`, email]);
+    // Audit log (silencioso)
+    pool.query('INSERT INTO usage_logs (user_id, activity) SELECT id, $1 FROM users WHERE email = $2', 
+      [`ANALYZE_${perfil.toUpperCase()}`, email]).catch(e => console.error("Log error:", e));
 
     res.json({ text });
   } catch (error) {
-    console.error("Gemini Error:", error);
-    res.status(500).json({ error: 'Erro no processamento da IA. Tente novamente.' });
+    console.error("Gemini/Processing Error:", error);
+    res.status(500).json({ error: 'Erro ao gerar insight. Tente novamente em instantes.' });
   }
 });
 
