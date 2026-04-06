@@ -62,7 +62,7 @@ const authenticateGoogleToken = async (req, res, next) => {
       
       if (userCheck.rows.length === 0) {
         await pool.query(
-          'INSERT INTO users (email, name, plan) VALUES ($1, $2, $3)',
+          'INSERT INTO users (email, full_name, plan) VALUES ($1, $2, $3)',
           [email, name, 'FREE']
         );
         req.user = { email, plan: 'FREE' };
