@@ -2,6 +2,12 @@
   "manifest_version": 3,
   "name": "Alpha Insights",
   "version": "1.5",
+  "description": "Inteligência Artificial preditiva para análise de teses de investimentos, relatórios financeiros e riscos. Exclusivo para perfis Alpha.",
+  "icons": {
+    "16": "icon.png",
+    "48": "icon.png",
+    "128": "icon.png"
+  },
   "permissions": ["sidePanel", "activeTab", "scripting", "storage", "identity"],
   "oauth2": {
     "client_id": "923198032473-orpi2v6at6dt0dfn39cv0slgf8qalpqt.apps.googleusercontent.com",
